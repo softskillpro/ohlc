@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: my-postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: 'mysecretpassword'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_DB: 'ohcl'
+    ports:
+      - "5432:5432"
+  ohcl:
+    container_name: ohlc
+    image: ohlc:latest
+    restart: always
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=:8080
+      - DATABASE=postgres://postgres:mysecretpassword@my-postgres:5432/ohcl?sslmode=disable
